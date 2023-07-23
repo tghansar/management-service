@@ -1,4 +1,4 @@
-package com.example.managementservice.resources;
+package com.example.managementservice.controllers;
 
 import com.example.managementservice.models.Book;
 import com.example.managementservice.models.Books;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "books")
 @Path("/books")
-public class BookResource
+public class BookRESTController
 {
     private static Map<Long, Book> DB = new HashMap<>();
 
@@ -39,6 +39,7 @@ public class BookResource
     }
 
     @POST
+    @Produces("application/json")
     @Consumes("application/json")
     public Response createBook(Book book) throws URISyntaxException
     {
@@ -79,7 +80,7 @@ public class BookResource
     @Path("/{id}")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response updateUser(@PathParam("id") Long id, Book book) throws URISyntaxException
+    public Response updateBook(@PathParam("id") Long id, Book book) throws URISyntaxException
     {
         Book temp = DB.get(id);
         if(book == null)
@@ -99,7 +100,7 @@ public class BookResource
 
     @DELETE
     @Path("/{id}")
-    public Response deleteUser(@PathParam("id") Long id) throws URISyntaxException
+    public Response deleteBook(@PathParam("id") Long id) throws URISyntaxException
     {
         Book book = DB.get(id);
 
@@ -114,23 +115,21 @@ public class BookResource
 
     static
     {
-        Book book1 = new Book();
+        Book book1 = new Book("/book-management/1",
+                "Design Patterns",
+                "1234-5678-90",
+                "1994",
+                "700",
+                "Hard Cover");
         book1.setId(1L);
-        book1.setName("Design Patterns");
-        book1.setIsbn("1234-5678-90");
-        book1.setPublishDate("1994");
-        book1.setPrice("500");
-        book1.setBookType("Soft Cover");
-        book1.setUri("/user-management/1");
 
-        Book book2 = new Book();
+        Book book2 = new Book("/book-management/1",
+                "Atomic Habits",
+                "4321-8765-09",
+                "2018",
+                "360",
+                "Soft Cover");
         book2.setId(2L);
-        book2.setName("Design Patterns");
-        book2.setIsbn("4321-8765-09");
-        book2.setPublishDate("2010");
-        book2.setPrice("1000");
-        book2.setBookType("Hard Cover");
-        book2.setUri("/user-management/2");
 
         DB.put(book1.getId(), book1);
         DB.put(book2.getId(), book2);

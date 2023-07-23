@@ -1,6 +1,6 @@
 package com.example.managementservice;
 
-import com.example.managementservice.resources.BookResource;
+import com.example.managementservice.controllers.BookRESTController;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +9,6 @@ public class JerseyConfig extends ResourceConfig
 {
     public JerseyConfig()
     {
-        register(BookResource.class);
+        register(BookRESTController.class);
     }
 }

@@ -9,10 +9,22 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "user")
+@XmlRootElement(name = "book")
 public class Book implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public Book() {
+    }
+
+    public Book(String uri, String name, String isbn, String publishDate, String price, String bookType) {
+        this.uri = uri;
+        this.name = name;
+        this.isbn = isbn;
+        this.publishDate = publishDate;
+        this.price = price;
+        this.bookType = bookType;
+    }
 
     @XmlAttribute(name = "id")
     private Long id;
