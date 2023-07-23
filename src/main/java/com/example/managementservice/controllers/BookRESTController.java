@@ -51,9 +51,9 @@ public class BookRESTController
         {
             return Response.status(400).entity("Please provide all mandatory inputs").build();
         }
+        System.out.println(book.toString());
         book.setId(Long.valueOf(DB.values().size() + 1));
         book.setUri("/book-management/"+book.getId());
-        book.setUri("1000");
         DB.put(book.getId(), book);
         return Response.status(201).contentLocation(new URI(book.getUri())).build();
     }
@@ -115,16 +115,14 @@ public class BookRESTController
 
     static
     {
-        Book book1 = new Book("/book-management/1",
-                "Design Patterns",
+        Book book1 = new Book("Design Patterns",
                 "1234-5678-90",
                 "1994",
                 "700",
                 "Hard Cover");
         book1.setId(1L);
 
-        Book book2 = new Book("/book-management/1",
-                "Atomic Habits",
+        Book book2 = new Book("Atomic Habits",
                 "4321-8765-09",
                 "2018",
                 "360",
