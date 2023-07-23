@@ -7,8 +7,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 public class ManagementServiceApplication extends SpringBootServletInitializer {
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         new ManagementServiceApplication().configure(
                 new SpringApplicationBuilder(ManagementServiceApplication.class)).run(args);
     }

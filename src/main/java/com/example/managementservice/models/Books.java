@@ -10,7 +10,7 @@ import java.util.ArrayList;
 @XmlRootElement(name = "books")
 public class Books {
 
-    @XmlElement(name="book")
+    @XmlElement(name = "book")
     private ArrayList<Book> books;
 
     public ArrayList<Book> getBooks() {
