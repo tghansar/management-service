@@ -2,6 +2,8 @@ package com.example.managementservice.controllers;
 
 import com.example.managementservice.models.Book;
 import com.example.managementservice.models.Books;
+import com.example.managementservice.repositories.BookRepository;
+import org.springframework.stereotype.Controller;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -10,21 +12,27 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
+@Controller
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "books")
 @Path("/books")
 public class BookRESTController {
-    private static final Map<Long, Book> DB = new HashMap<>();
+
+    private final BookRepository bookRepository;
+
+    public BookRESTController(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
     @GET
     @Produces("application/json")
     public Books getAllBooks() {
         Books books = new Books();
-        books.setBooks(new ArrayList<Book>(DB.values()));
+        books.setBooks(new ArrayList<Book>(
+                (Collection<? extends Book>) bookRepository.findAll()));
+
         return books;
     }
 
@@ -40,9 +48,13 @@ public class BookRESTController {
                 || book.getBookType() == null) {
             return Response.status(400).entity("Please provide all inputs").build();
         }
-        book.setId(Long.valueOf(DB.values().size() + 1));
+
+        book.setId(bookRepository.findAll().spliterator().getExactSizeIfKnown() + 1);
         book.setUri("/book-management/" + book.getId());
-        DB.put(book.getId(), book);
+
+        // Save to H2 DB
+        bookRepository.save(book);
+
         return Response.status(201).contentLocation(new URI(book.getUri())).build();
     }
 
@@ -50,16 +62,19 @@ public class BookRESTController {
     @Path("/{id}")
     @Produces("application/json")
     public Response getBookById(@PathParam("id") Long id) throws URISyntaxException {
-        Book book = DB.get(id);
 
-        if (book == null) {
+        Optional<Book> optionalBook = bookRepository.findById(id);
+
+        if (optionalBook.isPresent()) {
+            Book book = optionalBook.get();
+            return Response
+                    .status(200)
+                    .entity(book)
+                    .contentLocation(new URI("/book-management/" + id)).build();
+        }
+        else {
             return Response.status(404).build();
         }
-
-        return Response
-                .status(200)
-                .entity(book)
-                .contentLocation(new URI("/book-management/" + id)).build();
     }
 
     @PUT
@@ -67,8 +82,14 @@ public class BookRESTController {
     @Consumes("application/json")
     @Produces("application/json")
     public Response updateBook(@PathParam("id") Long id, Book book) {
-        Book temp = DB.get(id);
-        if (book == null) {
+
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        Book temp;
+
+        if (optionalBook.isPresent()) {
+            temp = optionalBook.get();
+        }
+        else {
             return Response.status(404).build();
         }
 
@@ -78,41 +99,23 @@ public class BookRESTController {
         temp.setPrice(book.getPrice());
         temp.setBookType(book.getBookType());
 
-        DB.put(temp.getId(), temp);
+        bookRepository.save(temp);
+
         return Response.status(200).entity(temp).build();
     }
 
     @DELETE
     @Path("/{id}")
     public Response deleteBook(@PathParam("id") Long id) {
-        Book book = DB.get(id);
 
-        if (book != null) {
-            DB.remove(book.getId());
+        Optional<Book> optionalBook = bookRepository.findById(id);
+
+        if (optionalBook.isPresent()) {
+            bookRepository.deleteById(id);
             return Response.status(200).build();
         }
-
-        return Response.status(404).build();
-    }
-
-    static {
-        Book book1 = new Book("Design Patterns",
-                "1234-5678-90",
-                "1994",
-                "700",
-                "Hard Cover");
-        book1.setId(1L);
-        book1.setUri("/book-management/1");
-
-        Book book2 = new Book("Atomic Habits",
-                "4321-8765-09",
-                "2018",
-                "360",
-                "Soft Cover");
-        book2.setId(2L);
-        book2.setUri("/book-management/2");
-
-        DB.put(book1.getId(), book1);
-        DB.put(book2.getId(), book2);
+        else {
+            return Response.status(404).build();
+        }
     }
 }
