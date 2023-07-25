@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "e5fc7803-07fd-40ae-8e11-6bb2ea1a17e8",
+		"name": "PayU Assessment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "7507318"
+	},
+	"item": [
+		{
+			"name": "localhost:8084/books (List)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8084/books"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8084/books/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8084/books/1"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8084/books/2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8084/books/2"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8084/books/create (Add)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"book_name\": \"Finding Nemo\",\n    \"book_isbn\": \"05183201528\",\n    \"book_publish_dt\": \"2020\",\n    \"book_price\": \"150\",\n    \"book_type\": \"Hard Cover\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8084/books/create"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8084/books/create (Update ID 3)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"book_name\": \"Finding Dory\",\n    \"book_isbn\": \"05183201528\",\n    \"book_publish_dt\": \"2020\",\n    \"book_price\": \"150\",\n    \"book_type\": \"Hard Cover\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8084/books/3"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8084/books/create (Delete ID 3)",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8084/books/3"
+			},
+			"response": []
+		}
+	]
+}
