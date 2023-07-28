@@ -65,6 +65,7 @@ public class BookRESTController {
 
         Optional<Book> optionalBook = bookRepository.findById(id);
 
+        // Retrieve valid book
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
             return Response
@@ -86,6 +87,7 @@ public class BookRESTController {
         Optional<Book> optionalBook = bookRepository.findById(id);
         Book temp;
 
+        // Retrieve valid book
         if (optionalBook.isPresent()) {
             temp = optionalBook.get();
         }
@@ -93,6 +95,7 @@ public class BookRESTController {
             return Response.status(404).build();
         }
 
+        // overwrite properties of book
         temp.setName(book.getName());
         temp.setIsbn(book.getIsbn());
         temp.setPublishDate(book.getPublishDate());
@@ -110,6 +113,7 @@ public class BookRESTController {
 
         Optional<Book> optionalBook = bookRepository.findById(id);
 
+        // Retrieve valid book
         if (optionalBook.isPresent()) {
             bookRepository.deleteById(id);
             return Response.status(200).build();

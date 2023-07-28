@@ -5,6 +5,10 @@ import com.example.managementservice.repositories.BookRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+/*
+* Created this class to add 2 book examples at startup
+* */
+
 @Component
 public class BootStrapData implements CommandLineRunner {
 
