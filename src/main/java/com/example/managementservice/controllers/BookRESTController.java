@@ -52,7 +52,7 @@ public class BookRESTController {
         book.setId(bookRepository.findAll().spliterator().getExactSizeIfKnown() + 1);
         book.setUri("/book-management/" + book.getId());
 
-        // Save to H2 DB
+        // persist book
         bookRepository.save(book);
 
         return Response.status(201).contentLocation(new URI(book.getUri())).build();
@@ -62,10 +62,9 @@ public class BookRESTController {
     @Path("/{id}")
     @Produces("application/json")
     public Response getBookById(@PathParam("id") Long id) throws URISyntaxException {
-
         Optional<Book> optionalBook = bookRepository.findById(id);
 
-        // Retrieve valid book
+        // retrieve valid book
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
             return Response
@@ -83,11 +82,10 @@ public class BookRESTController {
     @Consumes("application/json")
     @Produces("application/json")
     public Response updateBook(@PathParam("id") Long id, Book book) {
-
         Optional<Book> optionalBook = bookRepository.findById(id);
         Book temp;
 
-        // Retrieve valid book
+        // retrieve valid book
         if (optionalBook.isPresent()) {
             temp = optionalBook.get();
         }
@@ -95,13 +93,24 @@ public class BookRESTController {
             return Response.status(404).build();
         }
 
-        // overwrite properties of book
-        temp.setName(book.getName());
-        temp.setIsbn(book.getIsbn());
-        temp.setPublishDate(book.getPublishDate());
-        temp.setPrice(book.getPrice());
-        temp.setBookType(book.getBookType());
+        System.out.println(book);
+        System.out.println(temp);
 
+        // write retrieved data to temp book
+        temp.setName((!book.getName().equals("")) ? book.getName() : temp.getName());
+
+        temp.setIsbn((!book.getIsbn().equals("")) ? book.getIsbn() : temp.getIsbn());
+
+        temp.setPublishDate((!book.getPublishDate().equals("")) ? book.getPublishDate() : temp.getPublishDate());
+
+        temp.setPrice((!book.getPrice().equals("")) ? book.getPrice() : temp.getPrice());
+
+        temp.setBookType((!book.getBookType().equals("")) ? book.getBookType() : temp.getBookType());
+
+        // delete old book
+        bookRepository.deleteById(id);
+
+        // persist temp as new book with new generated id
         bookRepository.save(temp);
 
         return Response.status(200).entity(temp).build();
@@ -110,10 +119,9 @@ public class BookRESTController {
     @DELETE
     @Path("/{id}")
     public Response deleteBook(@PathParam("id") Long id) {
-
         Optional<Book> optionalBook = bookRepository.findById(id);
 
-        // Retrieve valid book
+        // retrieve valid book
         if (optionalBook.isPresent()) {
             bookRepository.deleteById(id);
             return Response.status(200).build();
