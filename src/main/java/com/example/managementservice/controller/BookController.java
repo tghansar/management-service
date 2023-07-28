@@ -1,8 +1,8 @@
-package com.example.managementservice.controllers;
+package com.example.managementservice.controller;
 
-import com.example.managementservice.models.Book;
-import com.example.managementservice.models.Books;
-import com.example.managementservice.repositories.BookRepository;
+import com.example.managementservice.model.Book;
+import com.example.managementservice.model.Books;
+import com.example.managementservice.repository.BookRepository;
 import org.springframework.stereotype.Controller;
 
 import javax.ws.rs.*;
@@ -18,11 +18,11 @@ import java.util.*;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "books")
 @Path("/books")
-public class BookRESTController {
+public class BookController {
 
     private final BookRepository bookRepository;
 
-    public BookRESTController(BookRepository bookRepository) {
+    public BookController(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
@@ -82,8 +82,8 @@ public class BookRESTController {
     @Consumes("application/json")
     @Produces("application/json")
     public Response updateBook(@PathParam("id") Long id, Book book) {
+        Book mergedBookData, temp;
         Optional<Book> optionalBook = bookRepository.findById(id);
-        Book temp;
 
         // retrieve valid book
         if (optionalBook.isPresent()) {
@@ -93,25 +93,13 @@ public class BookRESTController {
             return Response.status(404).build();
         }
 
-        System.out.println(book);
-        System.out.println(temp);
-
-        // write retrieved data to temp book
-        temp.setName((!book.getName().equals("")) ? book.getName() : temp.getName());
-
-        temp.setIsbn((!book.getIsbn().equals("")) ? book.getIsbn() : temp.getIsbn());
-
-        temp.setPublishDate((!book.getPublishDate().equals("")) ? book.getPublishDate() : temp.getPublishDate());
-
-        temp.setPrice((!book.getPrice().equals("")) ? book.getPrice() : temp.getPrice());
-
-        temp.setBookType((!book.getBookType().equals("")) ? book.getBookType() : temp.getBookType());
+        mergedBookData = mergeFields(book, temp);
 
         // delete old book
         bookRepository.deleteById(id);
 
-        // persist temp as new book with new generated id
-        bookRepository.save(temp);
+        // persist new book with new auto-generated id
+        bookRepository.save(mergedBookData);
 
         return Response.status(200).entity(temp).build();
     }
@@ -129,5 +117,16 @@ public class BookRESTController {
         else {
             return Response.status(404).build();
         }
+    }
+
+    // -- helper methods --
+    Book mergeFields (Book book, Book temp) {
+        temp.setName((!book.getName().equals("")) ? book.getName() : temp.getName());
+        temp.setIsbn((!book.getIsbn().equals("")) ? book.getIsbn() : temp.getIsbn());
+        temp.setPublishDate((!book.getPublishDate().equals("")) ? book.getPublishDate() : temp.getPublishDate());
+        temp.setPrice((!book.getPrice().equals("")) ? book.getPrice() : temp.getPrice());
+        temp.setBookType((!book.getBookType().equals("")) ? book.getBookType() : temp.getBookType());
+
+        return temp;
     }
 }

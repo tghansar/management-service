@@ -1,4 +1,4 @@
-package com.example.managementservice.models;
+package com.example.managementservice.model;
 
 import java.io.Serializable;
 

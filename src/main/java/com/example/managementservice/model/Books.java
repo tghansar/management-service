@@ -1,4 +1,4 @@
-package com.example.managementservice.models;
+package com.example.managementservice.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

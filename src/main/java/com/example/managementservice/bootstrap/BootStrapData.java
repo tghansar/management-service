@@ -1,12 +1,12 @@
 package com.example.managementservice.bootstrap;
 
-import com.example.managementservice.models.Book;
-import com.example.managementservice.repositories.BookRepository;
+import com.example.managementservice.model.Book;
+import com.example.managementservice.repository.BookRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 /*
-* Created this class to add 2 book examples at startup
+* Adding 2 book examples at service startup
 * */
 
 @Component
@@ -36,6 +36,7 @@ public class BootStrapData implements CommandLineRunner {
         book2.setId(2L);
         book2.setUri("/book-management/2");
 
+        // persist book objects
         bookRepository.save(book1);
         bookRepository.save(book2);
     }
