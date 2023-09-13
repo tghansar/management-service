@@ -54,13 +54,23 @@ public class BookServiceImpl implements BookService{
     }
 
     // -- helper methods --
-    Book mergeFields (Book book1, Book book2) {
-        book1.setName((book2.getName() != null) ? book2.getName() : book1.getName());
-        book1.setIsbn((book2.getIsbn() != null) ? book2.getIsbn() : book1.getIsbn());
-        book1.setPublishDate((book2.getPublishDate() != null) ? book2.getPublishDate() : book1.getPublishDate());
-        book1.setPrice((book2.getPrice() != null) ? book2.getPrice() : book1.getPrice());
-        book1.setBookType((book2.getBookType() != null) ? book2.getBookType() : book1.getBookType());
+    Book mergeFields (Book current, Book other) {
 
-        return book1;
+        current.setName((other.getName() == null
+                || "".equals(other.getName())) ? current.getName() : other.getName());
+
+        current.setIsbn((other.getIsbn() == null
+                || "".equals(other.getIsbn())) ? current.getIsbn() : other.getIsbn());
+
+        current.setPublishDate((other.getPublishDate() == null
+                || "".equals(other.getPublishDate())) ? current.getPublishDate() : other.getPublishDate());
+
+        current.setPrice((other.getPrice() == null
+                || "".equals(other.getPrice())) ? current.getPrice() : other.getPrice());
+
+        current.setBookType((other.getBookType() == null
+                || "".equals(other.getBookType())) ? current.getBookType() : other.getBookType());
+
+        return current;
     }
 }
