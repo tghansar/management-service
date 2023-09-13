@@ -25,16 +25,12 @@ public class BootStrapData implements CommandLineRunner {
                 "1994",
                 "700",
                 "Hard Cover");
-        book1.setId(1L);
-        book1.setUri("/book-management/1");
 
         Book book2 = new Book("Atomic Habits",
                 "4321-8765-09",
                 "2018",
                 "360",
                 "Soft Cover");
-        book2.setId(2L);
-        book2.setUri("/book-management/2");
 
         // persist book objects
         bookRepository.save(book1);
